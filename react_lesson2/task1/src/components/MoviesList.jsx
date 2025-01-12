@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 
 const MoviesList =() =>{
-    const [movies, changeMovies] = useState([{name:'Lion King', about:'A story about a lion',visible:false,genre:"cartoon"}, {name:'Harry Potter',about:'A story about magic',visible:false, genre:'fantasy'},{name:'Snow White', about: 'A story about a princess, a witch, and an apple.',visible:false, genre:'cartoon'},{name:'Gone With The Wind', about: 'A very very very long and old movie',visible:false, genre:'history'}]);
+    const [movies, changeMovies] = useState([{name:'Lion King', about:'A story about a lion',visible:false,genre:true}, {name:'Harry Potter',about:'A story about magic',visible:false, genre:false},{name:'Snow White', about: 'A story about a princess, a witch, and an apple.',visible:false, genre:true},{name:'Gone With The Wind', about: 'A very very very long and old movie',visible:false, genre:false}]);
     
     
     function hideAbout(index){
@@ -31,11 +31,11 @@ const MoviesList =() =>{
     const [genre,changeGenre] = useState(true);
   
     const showAll=()=>{
-        return changeGenre(true);
+        return changeGenre(false);
 
     }
     const showCartoons =() =>{
-        return changeGenre(false);
+        return changeGenre(true);
 
     }
 
@@ -43,9 +43,7 @@ const MoviesList =() =>{
 
 
     return( 
-        genre?
-        (
-        
+        !genre ? (
         <div>
            
             <button onClick={ ()=> showCartoons()}>Show All</button>
@@ -53,47 +51,70 @@ const MoviesList =() =>{
             <h2>Click on the movie title, to learn more about it.</h2>
             <ul>
                 {movies.map((movie,index) => 
-                !movie['visible']? (
-                    <li key={index} id={index}>
-                    <button id={index} onClick={()=>changeMovies(movies.filter(a=>a.name!==movie.name))}>Remove Movie</button>
-                    <p id={index} onClick={()=>showAbout(event.target.id)}>{movie['name']}</p></li>
-                    
-                 ):
-                 (
-                    <li key={index} id={index}>
-                    <br></br>
-                    <button id={index} onClick={()=>changeMovies(movies.filter(a=>a.name!==movie.name))}>Remove Movie</button> 
-                    <p id={index} onClick={()=>hideAbout(event.target.id)}>{movie['name']}}<br></br>{movie['about']}</p>
-                    </li>
-                 )
-                 )}
+                        !movie['visible']? 
+                        (
+                            movie['genre']?
+                            (
+                                <li key={index} id={index}>
+                                <button id={index} onClick={()=>changeMovies(movies.filter(a=>a.name!==movie.name))}>Remove Movie</button>
+                                <p id={index} onClick={()=>showAbout(event.target.id)}>{movie['name']}</p></li>
+                            )
+                            :
+                            (
+                                <></>
+                            )   
+                            
+                        )
+                        :
+                        (
+                            !movie['genre']?
+                            (  
+                                <li key={index} id={index}>
+                                <br></br>
+                                <button id={index} onClick={()=>changeMovies(movies.filter(a=>a.name!==movie.name))}>Remove Movie</button> 
+                                <p id={index} onClick={()=>hideAbout(event.target.id)}>{movie['name']}<br></br>{movie['about']}</p>
+                                </li>
+                            ):
+                            (
+                                <></>
+                            )
+                        )
+                        
+                    )
+                }
+                
             </ul>
         </div>)
-        :  
-        (
-            <div>
-            <button onClick={()=> showAll()}>Show cartoons only</button>
+    :
+    (
+        <div>
+           
+            <button onClick={ ()=> showAll()}>Show Cartoons</button>
+            
             <h2>Click on the movie title, to learn more about it.</h2>
-        <ul>
-            {movies.map((movie,index) => !movie['visible'] ? (
+            <ul>
+                {movies.map((movie,index) => 
                 
-                <li key={index} id={index}>
-                <button id={index} onClick={()=>changeMovies(movies.filter(a=>a.name!==movie.name))}>Remove Movie</button>
-                <p id={index} onClick={()=>showAbout(event.target.id)}>{movie['name']}</p></li>
+                        !movie['visible']? (
+                            <li key={index} id={index}>
+                            <button id={index} onClick={()=>changeMovies(movies.filter(a=>a.name!==movie.name))}>Remove Movie</button>
+                            <p id={index} onClick={()=>showAbout(event.target.id)}>{movie['name']}</p></li>
+                            
+                        ):
+                        (
+                            <li key={index} id={index}>
+                            <br></br>
+                            <button id={index} onClick={()=>changeMovies(movies.filter(a=>a.name!==movie.name))}>Remove Movie</button> 
+                            <p id={index} onClick={()=>hideAbout(event.target.id)}>{movie['name']}<br></br>{movie['about']}</p>
+                            </li>
+                        )
+                        
+               
+                )}
                 
-             ):
-             (
-                <li key={index} id={index}>
-                <br></br>
-                <button id={index} onClick={()=>changeMovies(movies.filter(a=>a.name!==movie.name))}>Remove Movie</button> 
-                <p id={index} onClick={()=>hideAbout(event.target.id)}>{movie['name']}<br></br>{movie['about']}</p>
-                </li>
-             )
-             )}
-        </ul>
-     
-        </div>
-        )
-    );
+            </ul>
+        </div>)
+    )
+         
 }
 export default MoviesList;
